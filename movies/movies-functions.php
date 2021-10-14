@@ -1,18 +1,18 @@
 <?php
 
-function printAvailableMovies(array $movies, int $age):void
+function printAvailableMovies(array $movies, int $userAge):void
 {
-	$num = 1;
+	$movieNum = 1;
 	foreach ($movies as $movie)
 	{
-		if($age >= $movie["age_restriction"])
+		if($userAge >= $movie["age_restriction"])
 		{
-			printMessage(formatMovie($movie, $num++));
+			printMessage(formatMovie($movie, $movieNum++));
 		}
 	}
 }
 
-function formatMovie($movie, $num):string
+function formatMovie($movie, $movieNum):string
 {
-	return "$num. ${movie["title"]} (${movie["release_year"]}), ${movie["age_restriction"]}+. Rating - ${movie["rating"]}";
+	return "$movieNum. ${movie["title"]} (${movie["release_year"]}), ${movie["age_restriction"]}+. Rating - ${movie["rating"]}";
 }
