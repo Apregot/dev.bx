@@ -2,7 +2,7 @@
 
 function printAvailableMovies(array $movies, int $userAge):void
 {
-	$movieNum = 1;
+	$movieNum = 0;
 	foreach ($movies as $movie)
 	{
 		if($userAge >= $movie["age_restriction"])
