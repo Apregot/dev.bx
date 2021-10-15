@@ -7,7 +7,8 @@ function printAvailableMovies(array $movies, int $userAge):void
 	{
 		if($userAge >= $movie["age_restriction"])
 		{
-			printMessage(formatMovie($movie, $movieNum++));
+			$movieNum++;
+			printMessage(formatMovie($movie, $movieNum));
 		}
 	}
 }
