@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+.movie-info {
+	display: block;
+	height: 985px;
+	margin-top: 35px;
+	padding-left: 45px;
+}
+
+.movie-info__head {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+.movie-info__head__name {
+	padding-top: 35px;
+	display: block;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.movie-info__head__name__title {
+	font-style: normal;
+	font-weight: bold;
+	font-size: 48px;
+	line-height: 65px;
+	color: #333333;
+
+}
+
+.movie-info__head__name__bottom {
+	display: flex;
+	align-items: center;
+	margin-top: 8px;
+	margin-bottom: 26px;
+}
+
+.movie-info__head__name__bottom__subtitle {
+	font-style: normal;
+	font-weight: 600;
+	font-size: 24px;
+	line-height: 33px;
+
+	color: #999999;
+}
+
+.movie-info__head__name__bottom__age-restriction {
+	font-style: normal;
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 25px;
+	color: #CCCCCC;
+	text-align: center;
+
+	background: rgba(242, 242, 242, 0.1);
+	border: 3px solid #CCCCCC;
+	box-sizing: border-box;
+	border-radius: 7px;
+	padding: 0 5px;
+	margin-left: 10px;
+	min-width: 40px;
+}
+
+.movie-info__head__favourite-button {
+	min-width: 43px;
+	max-width: 43px;
+	height: 37px;
+	background-image: url(../images/icon-in-favourites.svg);
+	margin-top: 55px;
+	margin-right: 20px;
+}
+
+.movie-info__body {
+	padding-top: 35px;
+	display: flex;
+}
+
+.movie-info__body__image {
+	min-width: 470px;
+	max-width: 470px;
+	height: 730px;
+	background-size: cover;
+}
+
+.movie-info__body__details {
+	display: block;
+	margin-left: 45px;
+}
+
+.movie-info__body__details__rating {
+	padding-left: 20px;
+	display: flex;
+	align-items: center;
+}
+
+.movie-info__body__details__rating__list {
+	list-style: none;
+}
+
+.movie-info__body__details__rating__list__item {
+	display: inline-block;
+	width: 19px;
+	height: 19px;
+	background: #E78818;
+	margin: 3px;
+	box-sizing: border-box;
+}
+
+.movie-info__body__details__rating__list__item_empty {
+	background: #F2F2F2;
+}
+
+.movie-info__body__details__rating__num {
+	width: 55px;
+	height: 55px;
+	background: #E78818;
+	border-radius: 55px;
+	margin-left: 9px;
+
+	font-family: 'Open Sans', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 22px;
+	line-height: 30px;
+	display: flex;
+	align-items: center;
+	color: #FFFFFF;
+	justify-content: center;
+}
+
+.movie-info__body__details__heading {
+	font-family: 'Open Sans', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 24px;
+	line-height: 33px;
+	color: #333333;
+	padding: 15px 0;
+}
+
+.movie-info__body__details__about-list {
+	list-style: none;
+	display: block;
+}
+
+.movie-info__body__details__about-list__item {
+	font-family: 'Open Sans', sans-serif;
+
+	display: flex;
+	padding: 7px 0;
+}
+
+.movie-info__body__details__about-list__item__key {
+	font-weight: normal;
+	min-width: 235px;
+	max-width: 235px;
+	font-size: 16px;
+	line-height: 22px;
+	color: #666666;
+}
+
+.movie-info__body__details__about-list__item__value {
+	font-weight: normal;
+	font-size: 16px;
+	line-height: 22px;
+	color: #000000;
+	overflow: hidden;
+}
+
+.movie-info__body__details__description {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: normal;
+	font-size: 18px;
+	line-height: 28px;
+	color: #000000;
+}
