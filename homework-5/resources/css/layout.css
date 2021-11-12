@@ -10,6 +10,7 @@
 	display: block;
 	width: 400px;
 	background: #383838;
+	overflow: auto;
 }
 
 .logo {
@@ -155,7 +156,7 @@
 
 .menu__item a {
 	display: flex;
-	height: 44px;
+	height: 70px;
 	padding: 0 15px;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 600;

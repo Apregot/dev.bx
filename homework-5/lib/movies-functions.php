@@ -52,3 +52,8 @@ function getMoviesByGenre(array $movies, string $genreFilter): array
 		return in_array($genreFilter, $movie['genres'], true);
 	});
 }
+
+function getMovieById(array $movies, int $movieId): array
+{
+	return $movies[array_search($movieId ,array_column($movies, 'id'), true)];
+}

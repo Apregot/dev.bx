@@ -34,7 +34,7 @@
 					<?php
 					endfor; ?>
 				</ul>
-				<div class="movie-info__body__details__rating__num"><?= $movie['rating'] ?></div>
+				<div class="movie-info__body__details__rating__num"><?= number_format($movie['rating'], 1) ?></div>
 			</div>
 			<div class="movie-info__body__details__heading">О фильме</div>
 			<ul class="movie-info__body__details__about-list">

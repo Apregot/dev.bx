@@ -14,7 +14,7 @@ $bitflixPage = "";
 
 if (isset($_GET['id']) && in_array((int)$_GET['id'], range(1, count($movies)), true))
 {
-	$movie = $movies[(int)$_GET['id'] - 1];
+	$movie = getMovieById($movies, (int)$_GET['id']);
 
 	$bitflixPage = renderTemplate("./resources/pages/details-content.php", [
 		'movie' => $movie,
