@@ -39,16 +39,16 @@
 	z-index: 3;
 }
 
-.menu-item {
+.menu__item {
 	display: block;
 	border-bottom: 1px solid rgba(242, 242, 242, 0.1);
 }
 
-.menu-item:last-child {
+.menu__item:last-child {
 	border: none;
 }
 
-.menu-item a {
+.menu__item a {
 	display: flex;
 	height: 70px;
 	padding: 0 15px;
@@ -63,8 +63,8 @@
 	color: #B7B7B7;
 }
 
-.menu-item a:hover,
-.menu-item--active {
+.menu__item a:hover,
+.menu__item_active {
 	background: rgba(255, 255, 255, 0.05);
 	color: #FFFFFF;
 }
