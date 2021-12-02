@@ -193,7 +193,7 @@ function formatMovieTime(int $movieDuration): string
 	return (string)$movieDuration . ' мин./' . date('H:i', mktime(0, $movieDuration));
 }
 
-function formatArray(array $movieGenres): string
+function formatActorsArray(array $movieGenres): string
 {
 	return implode(', ', $movieGenres);
 }
