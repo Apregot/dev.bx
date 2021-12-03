@@ -1,8 +1,7 @@
 <?php
 
-function getMoviesQuery(): string
-{
-	return 'SELECT DISTINCT m.ID     as movieID,
+const MOVIES_QUERY =
+	'SELECT DISTINCT m.ID     as movieID,
        TITLE,
        ORIGINAL_TITLE,
        DESCRIPTION,
@@ -19,10 +18,10 @@ function getMoviesQuery(): string
         where movieID = MOVIE_ID) as ACTORS
 FROM movie m
          INNER JOIN director d on m.DIRECTOR_ID = d.ID';
-}
 
-function formatActors(array $actorsArray, array $actorsNames): array
+function formatActors(string $actors, array $actorsNames): array
 {
+	$actorsArray = explode(',', $actors);
 	foreach ($actorsArray as $key => $value)
 	{
 		$actorsArray[$key] = $actorsNames[(int)$value]['NAME'];
@@ -30,9 +29,30 @@ function formatActors(array $actorsArray, array $actorsNames): array
 	return $actorsArray;
 }
 
+function getActorsFromDatabase(mysqli $database, string $actors): array
+{
+
+	$query = "SELECT * FROM actor WHERE ID IN($actors)";
+	$result = mysqli_query($database, $query);
+	if (!$result)
+	{
+		$error = mysqli_errno($database) . ": " . mysqli_error($database);
+		trigger_error($error, E_USER_ERROR);
+	}
+
+	$resultArray = [];
+	while ($row = mysqli_fetch_assoc($result))
+	{
+		$resultArray[(int)$row['ID']] = [
+			'NAME' => $row['NAME'],
+		];
+	}
+	return $resultArray;
+}
+
 function getMovieById(mysqli $database, int $id): array
 {
-	$query = getMoviesQuery();
+	$query = MOVIES_QUERY;
 	$query .= " WHERE m.ID = '$id'";
 
 	$result = mysqli_query($database, $query);
@@ -44,12 +64,11 @@ function getMovieById(mysqli $database, int $id): array
 	$resultArray = [];
 	while ($row = mysqli_fetch_assoc($result))
 	{
-		$actorsArray = explode(',', $row['ACTORS']);
-		$actorsNames = getActorsFromDatabase($database, $actorsArray);
+		$actorsNames = getActorsFromDatabase($database, $row['ACTORS']);
 
 		$resultArray = $row;
 		$resultArray['ACTORS'] =
-			formatActors($actorsArray, $actorsNames);
+			formatActors($row['ACTORS'], $actorsNames);
 	}
 	return $resultArray;
 }
@@ -66,7 +85,7 @@ function formatGenres(string $movieGenres, array $genres): array
 
 function getMoviesByGenre(mysqli $database, array $genres, string $genre = ''): array
 {
-	$query = getMoviesQuery();
+	$query = MOVIES_QUERY;
 	$genre = mysqli_real_escape_string($database, $genre);
 	if ($genre !== '')
 	{
@@ -88,29 +107,6 @@ function getMoviesByGenre(mysqli $database, array $genres, string $genre = ''): 
 		$resultArray[(int)$row['movieID']] = $row;
 		$resultArray[(int)$row['movieID']]['GENRES'] =
 			formatGenres($resultArray[(int)$row['movieID']]['GENRES'], $genres);
-	}
-	return $resultArray;
-}
-
-function getActorsFromDatabase(mysqli $database, array $actors): array
-{
-	$query = 'SELECT * FROM actor';
-	$result = mysqli_query($database, $query);
-	if (!$result)
-	{
-		$error = mysqli_errno($database) . ": " . mysqli_error($database);
-		trigger_error($error, E_USER_ERROR);
-	}
-
-	$resultArray = [];
-	while ($row = mysqli_fetch_assoc($result))
-	{
-		if (in_array($row['ID'], $actors, true))
-		{
-			$resultArray[(int)$row['ID']] = [
-				'NAME' => $row['NAME'],
-			];
-		}
 	}
 	return $resultArray;
 }
@@ -139,7 +135,7 @@ function getGenresFromDatabase(mysqli $database): array
 
 function getMoviesByName(mysqli $database, array $genres, string $searchRequest): array
 {
-	$query = getMoviesQuery();
+	$query = MOVIES_QUERY;
 	$searchRequest = mysqli_real_escape_string($database, $searchRequest);
 	$query .= " WHERE m.TITLE LIKE '%$searchRequest%' 
 				OR m.ORIGINAL_TITLE LIKE '%$searchRequest%'";
