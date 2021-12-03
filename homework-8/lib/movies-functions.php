@@ -1,7 +1,7 @@
 <?php
 
 const MOVIES_QUERY =
-	'SELECT DISTINCT m.ID     as movieID,
+'SELECT DISTINCT m.ID     as movieID,
        TITLE,
        ORIGINAL_TITLE,
        DESCRIPTION,
@@ -19,19 +19,18 @@ const MOVIES_QUERY =
 FROM movie m
          INNER JOIN director d on m.DIRECTOR_ID = d.ID';
 
-function formatActors(string $actors, array $actorsNames): array
+function transformStringToAssocArrayByData(string $originalString, array $dataArray, string $dataKey)
 {
-	$actorsArray = explode(',', $actors);
-	foreach ($actorsArray as $key => $value)
+	$resultArray = explode(',', $originalString);
+	foreach ($resultArray as $key => $value)
 	{
-		$actorsArray[$key] = $actorsNames[(int)$value]['NAME'];
+		$resultArray[$key] = $dataArray[(int)$value][$dataKey];
 	}
-	return $actorsArray;
+	return $resultArray;
 }
 
 function getActorsFromDatabase(mysqli $database, string $actors): array
 {
-
 	$query = "SELECT * FROM actor WHERE ID IN($actors)";
 	$result = mysqli_query($database, $query);
 	if (!$result)
@@ -68,19 +67,9 @@ function getMovieById(mysqli $database, int $id): array
 
 		$resultArray = $row;
 		$resultArray['ACTORS'] =
-			formatActors($row['ACTORS'], $actorsNames);
+			transformStringToAssocArrayByData($row['ACTORS'], $actorsNames, 'NAME');
 	}
 	return $resultArray;
-}
-
-function formatGenres(string $movieGenres, array $genres): array
-{
-	$result = explode(',', $movieGenres);
-	foreach ($result as $key => $value)
-	{
-		$result[$key] = $genres[(int)$value]['NAME'];
-	}
-	return $result;
 }
 
 function getMoviesByGenre(mysqli $database, array $genres, string $genre = ''): array
@@ -106,7 +95,7 @@ function getMoviesByGenre(mysqli $database, array $genres, string $genre = ''): 
 	{
 		$resultArray[(int)$row['movieID']] = $row;
 		$resultArray[(int)$row['movieID']]['GENRES'] =
-			formatGenres($resultArray[(int)$row['movieID']]['GENRES'], $genres);
+			transformStringToAssocArrayByData($resultArray[(int)$row['movieID']]['GENRES'], $genres, 'NAME');
 	}
 	return $resultArray;
 }
@@ -152,7 +141,7 @@ function getMoviesByName(mysqli $database, array $genres, string $searchRequest)
 	{
 		$resultArray[(int)$row['movieID']] = $row;
 		$resultArray[(int)$row['movieID']]['GENRES'] =
-			formatGenres($resultArray[(int)$row['movieID']]['GENRES'], $genres);
+			transformStringToAssocArrayByData($resultArray[(int)$row['movieID']]['GENRES'], $genres, 'NAME');
 	}
 	return $resultArray;
 }
@@ -160,12 +149,12 @@ function getMoviesByName(mysqli $database, array $genres, string $searchRequest)
 function formatMovieImageUrl(
 	string $imagePath, int $movieId, string $imageExtension): string
 {
-	return $imagePath . (string)$movieId . $imageExtension;
+	return $imagePath . $movieId . $imageExtension;
 }
 
 function formatMovieTitle(string $movieTitle, int $movieReleaseDate): string
 {
-	return $movieTitle . ' (' . (string)$movieReleaseDate . ')';
+	return $movieTitle . ' (' . $movieReleaseDate . ')';
 }
 
 function formatMovieDescription(string $movieTitle, string $movieDescription): string
@@ -186,10 +175,32 @@ function formatMovieDescription(string $movieTitle, string $movieDescription): s
 
 function formatMovieTime(int $movieDuration): string
 {
-	return (string)$movieDuration . ' мин./' . date('H:i', mktime(0, $movieDuration));
+	return $movieDuration . ' мин./' . date('H:i', mktime(0, $movieDuration));
 }
 
 function formatActorsArray(array $movieGenres): string
 {
 	return implode(', ', $movieGenres);
 }
+
+
+
+// function formatActors(string $actors, array $actorsNames): array
+// {
+// 	$actorsArray = explode(',', $actors);
+// 	foreach ($actorsArray as $key => $value)
+// 	{
+// 		$actorsArray[$key] = $actorsNames[(int)$value]['NAME'];
+// 	}
+// 	return $actorsArray;
+// }
+//
+// function formatGenres(string $movieGenres, array $genres): array
+// {
+// 	$result = explode(',', $movieGenres);
+// 	foreach ($result as $key => $value)
+// 	{
+// 		$result[$key] = $genres[(int)$value]['NAME'];
+// 	}
+// 	return $result;
+// }
