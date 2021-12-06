@@ -1,0 +1,11 @@
+.film-not-found {
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	line-height: 55px;
+	text-transform: uppercase;
+	color: #7c6f6f;
+	text-decoration: none;
+	font-size: 18px;
+}
