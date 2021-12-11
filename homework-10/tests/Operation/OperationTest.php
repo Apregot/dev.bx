@@ -178,6 +178,29 @@ class OperationTest extends TestCase
 		$operation->launch();
 	}
 
+	// public function testThatOperationDoesNotInvokeBeforeAndAfterActionsIfTheyDisabledInSettings(): void
+	// {
+	// 	$settings = new App\Operation\Settings();
+	//
+	// 	$settings->disableBeforeSaveActions();
+	// 	$settings->disableAfterSaveActions();
+	//
+	// 	$order = $this->getOrderThatSavesSuccessfully();
+	//
+	// 	$operation = new App\Operation\Operation($order, $settings);
+	// 	$operation->addAction(
+	// 		App\Operation\Operation::ACTION_BEFORE_SAVE,
+	// 		$this->getActionThatNeverInvoked()
+	// 	);
+	// 	$operation->addAction(
+	// 		App\Operation\Operation::ACTION_AFTER_SAVE,
+	// 		$this->getActionThatNeverInvoked()
+	// 	);
+	//
+	//
+	// 	$operation->launch();
+	// }
+
 	public function testThatAddActionThrowsExceptionIfPlacementNameIsInvalid(): void
 	{
 		$this->expectExceptionCode(App\Operation\Operation::EXCEPTION_CODE_WRONG_ACTION_TYPE);
