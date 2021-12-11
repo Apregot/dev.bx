@@ -8,13 +8,12 @@ class OperationTest extends TestCase
 	{
 		$order = $this->getMockBuilder(\App\Order::class)
 			->onlyMethods(['save'])
-			->getMock()
-		;
+			->getMock();
+
 
 		$order->expects(static::once())
 			->method('save')
-			->willReturn(new \App\Result())
-		;
+			->willReturn(new \App\Result());
 
 		return $order;
 	}
@@ -23,11 +22,9 @@ class OperationTest extends TestCase
 	{
 		$action = $this->getMockBuilder(\App\Operation\Action::class)
 			->onlyMethods(['process'])
-			->getMockForAbstractClass()
-		;
+			->getMockForAbstractClass();
 		$action->expects(static::never())
-			->method('process')
-		;
+			->method('process');
 
 		return $action;
 	}
@@ -47,8 +44,7 @@ class OperationTest extends TestCase
 	{
 		$order = $this->getMockBuilder(\App\Order::class)
 			->onlyMethods(['save'])
-			->getMock()
-		;
+			->getMock();
 
 		$errorCode = random_int(0, 999);
 
@@ -57,8 +53,7 @@ class OperationTest extends TestCase
 
 		$order->expects(static::once())
 			->method('save')
-			->willReturn($result)
-		;
+			->willReturn($result);
 
 		$operation = new App\Operation\Operation($order);
 
@@ -82,37 +77,33 @@ class OperationTest extends TestCase
 	{
 		$order = $this->getMockBuilder(\App\Order::class)
 			->onlyMethods(['save'])
-			->getMock()
-		;
+			->getMock();
 
 		$order->expects(static::never())
-			->method('save')
-		;
+			->method('save');
 
 		$operation = new App\Operation\Operation($order);
 
 		$action = $this->getMockBuilder(\App\Operation\Action::class)
 			->onlyMethods(['process'])
-			->getMockForAbstractClass()
-		;
+			->getMockForAbstractClass();
 		$errorMessage = 'Error during before action in test';
 		$action->expects(static::once())
 			->method('process')
 			->with($order)
-			->willReturn((new \App\Result())->addError(new Error($errorMessage)))
-		;
+			->willReturn((new \App\Result())->addError(new Error($errorMessage)));
 
 		$operation->addAction(
 			\App\Operation\Operation::ACTION_BEFORE_SAVE,
 			$action
 		);
 
-//		$action = new class extends \App\Operation\Action {
-//			public function process(\App\Order $order): \App\Result
-//			{
-//				return (new \App\Result())->addError(new Error('Test error'));
-//			}
-//		};
+		//		$action = new class extends \App\Operation\Action {
+		//			public function process(\App\Order $order): \App\Result
+		//			{
+		//				return (new \App\Result())->addError(new Error('Test error'));
+		//			}
+		//		};
 
 		$afterAction = $this->getActionThatNeverInvoked();
 
@@ -146,8 +137,7 @@ class OperationTest extends TestCase
 
 		$order = $this->getMockBuilder(\App\Order::class)
 			->onlyMethods(['save'])
-			->getMock()
-		;
+			->getMock();
 
 		$operation = new App\Operation\Operation($order, $settings);
 
@@ -186,6 +176,47 @@ class OperationTest extends TestCase
 		);
 
 		$operation->launch();
+	}
+
+	public function testThatAddActionThrowsExceptionIfPlacementNameIsInvalid(): void
+	{
+		$this->expectExceptionCode(App\Operation\Operation::EXCEPTION_CODE_WRONG_ACTION_TYPE);
+		$order = $this->getMockBuilder(\App\Order::class)
+			->onlyMethods(['save'])
+			->getMock();
+		$operation = new App\Operation\Operation($order);
+
+		$operation->addAction(
+			'Invalid',
+			$this->getActionThatNeverInvoked()
+		);
+
+	}
+
+	public function testThatResultContainsErrorIfAfterSaveActionFails(): void
+	{
+		$order = $this->getOrderThatSavesSuccessfully();
+		$operation = new App\Operation\Operation($order);
+
+		$action = $this->getMockBuilder(\App\Operation\Action::class)
+			->onlyMethods(['process'])
+			->getMockForAbstractClass();
+
+		$errorMessage = 'Error during after action in test';
+		$action->expects(static::once())
+			->method('process')
+			->with($order)
+			->willReturn((new \App\Result())->addError(new Error($errorMessage)))
+		;
+
+		$operation->addAction(
+			\App\Operation\Operation::ACTION_AFTER_SAVE,
+			$action
+		);
+		$result = $operation->launch();
+
+		static::assertFalse($result->isSuccess());
+		static::assertEquals($errorMessage, $result->getErrorMessages()[0]);
 	}
 
 }
