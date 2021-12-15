@@ -7,6 +7,7 @@ class Service
 	public const TYPES = [
 		"premium" => 0,
 		"premium_lite" => 1,
+		"ultimate" => 2,
 	];
 
 	private $isLite;
@@ -113,6 +114,11 @@ class Service
 	public function getType()
 	{
 		return $this->type;
+	}
+
+	public function getTypeName()
+	{
+		return array_keys(self::TYPES)[$this->type];
 	}
 
 	/**
